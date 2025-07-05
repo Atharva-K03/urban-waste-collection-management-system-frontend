@@ -58,115 +58,98 @@ const AdminDashboard = () => {
 
   const SidebarContent = () => (
     <div className="h-100 d-flex flex-column">
-      <div className="p-3 border-bottom">
-        <div className="d-flex align-items-center">
-          <Recycle size={24} className="text-success me-2" />
-          <h5 className="mb-0 fw-bold">WasteWise Admin</h5>
-        </div>
-        <small className="text-muted">Welcome, {user?.workerId}</small>
-      </div>
-      
       <Nav className="flex-column p-3 flex-grow-1">
         {menuItems.map((item) => {
           const IconComponent = item.icon;
           return (
             <Nav.Link
               key={item.id}
-              className={`d-flex align-items-center py-2 px-3 mb-1 rounded ${
-                activeView === item.id ? 'bg-success text-white' : 'text-dark'
+              className={`d-flex align-items-center py-3 px-3 mb-1 rounded ${
+                activeView === item.id ? 'bg-success text-white' : 'text-dark hover-bg-light'
               }`}
               onClick={() => {
                 setActiveView(item.id);
                 setShowSidebar(false);
               }}
-              style={{ cursor: 'pointer' }}
+              style={{ cursor: 'pointer', transition: 'all 0.2s ease' }}
             >
-              <IconComponent size={18} className="me-2" />
+              <IconComponent size={18} className="me-3" />
               {item.label}
             </Nav.Link>
           );
         })}
       </Nav>
-      
-      <div className="p-3 border-top">
-        <div className="d-flex gap-2">
-          <Button
-            variant="outline-secondary"
-            size="sm"
-            onClick={toggleTheme}
-            className="flex-grow-1"
-          >
-            {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
-          </Button>
-          <Button
-            variant="outline-danger"
-            size="sm"
-            onClick={logout}
-            className="flex-grow-1"
-          >
-            <LogOut size={16} />
-          </Button>
-        </div>
-      </div>
     </div>
   );
 
   return (
     <div className="min-vh-100 bg-light">
-      {/* Mobile Header */}
-      <Navbar bg="white" className="d-lg-none border-bottom">
+      {/* Horizontal Navbar */}
+      <Navbar bg="white" className="border-bottom shadow-sm" style={{ zIndex: 1030 }}>
         <Container fluid>
-          <Button
-            variant="outline-secondary"
-            onClick={() => setShowSidebar(true)}
-          >
-            <Menu size={20} />
-          </Button>
-          <Navbar.Brand className="mx-auto">
-            <Recycle size={24} className="text-success me-2" />
-            WasteWise
-          </Navbar.Brand>
-          <Button
-            variant="outline-danger"
-            size="sm"
-            onClick={logout}
-          >
-            <LogOut size={16} />
-          </Button>
+          {/* Left side - Hamburger menu and Brand */}
+          <div className="d-flex align-items-center">
+            <Button
+              variant="outline-secondary"
+              className="me-3"
+              onClick={() => setShowSidebar(true)}
+              style={{ border: 'none' }}
+            >
+              <Menu size={20} />
+            </Button>
+            <Navbar.Brand className="d-flex align-items-center mb-0">
+              <Recycle size={28} className="text-success me-2" />
+              <span className="fw-bold">WasteWise Admin</span>
+            </Navbar.Brand>
+          </div>
+
+          {/* Right side - Theme toggle and logout */}
+          <div className="d-flex align-items-center gap-2">
+            <Button
+              variant="outline-secondary"
+              size="sm"
+              onClick={toggleTheme}
+              className="d-flex align-items-center"
+              style={{ border: 'none' }}
+            >
+              {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
+            </Button>
+            <Button
+              variant="outline-danger"
+              size="sm"
+              onClick={logout}
+              className="d-flex align-items-center"
+              style={{ border: 'none' }}
+            >
+              <LogOut size={16} />
+            </Button>
+          </div>
         </Container>
       </Navbar>
 
-      <div className="d-flex">
-        {/* Desktop Sidebar */}
-        <div className="d-none d-lg-block bg-white border-end" style={{ width: '280px', minHeight: '100vh' }}>
+      {/* Collapsible Sidebar */}
+      <Offcanvas
+        show={showSidebar}
+        onHide={() => setShowSidebar(false)}
+        placement="start"
+        style={{ width: '280px' }}
+      >
+        <Offcanvas.Header closeButton className="border-bottom">
+          <Offcanvas.Title>Navigation Menu</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body className="p-0">
           <SidebarContent />
-        </div>
+        </Offcanvas.Body>
+      </Offcanvas>
 
-        {/* Mobile Sidebar */}
-        <Offcanvas
-          show={showSidebar}
-          onHide={() => setShowSidebar(false)}
-          placement="start"
-          className="d-lg-none"
-        >
-          <Offcanvas.Header closeButton>
-            <Offcanvas.Title>Menu</Offcanvas.Title>
-          </Offcanvas.Header>
-          <Offcanvas.Body className="p-0">
-            <SidebarContent />
-          </Offcanvas.Body>
-        </Offcanvas>
-
-        {/* Main Content */}
-        <div className="flex-grow-1">
-          <Container fluid className="p-4">
-            {renderContent()}
-          </Container>
-        </div>
+      {/* Main Content */}
+      <div className="flex-grow-1">
+        <Container fluid className="p-4">
+          {renderContent()}
+        </Container>
       </div>
     </div>
   );
 };
 
 export default AdminDashboard;
-
