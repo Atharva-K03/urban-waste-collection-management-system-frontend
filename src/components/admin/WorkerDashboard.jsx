@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Table, Button, Modal, Form, Alert, Spinner, Badge } from 'react-bootstrap';
 import { workerAPI } from '../../services/api';
-import { Plus, Edit, Trash2, Users, Search, Mail, Phone } from 'lucide-react';
+import { Plus, Edit, Users, Search, Mail, Phone } from 'lucide-react';
 import { authAPI } from '../../services/api';
+import { useTheme } from '../../contexts/ThemeContext';
+
 const WorkerDashboard = () => {
+  const { theme } = useTheme();
   const [workers, setWorkers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -70,12 +73,6 @@ const WorkerDashboard = () => {
     setShowModal(true);
   };
 
-  const handleDelete = (worker) => {
-    setModalType('delete');
-    setSelectedWorker(worker);
-    setShowModal(true);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
@@ -86,8 +83,6 @@ const WorkerDashboard = () => {
         await workerAPI.create(formData);  
       } else if (modalType === 'edit') {
         await workerAPI.update(selectedWorker.workerId, formData);
-      } else if (modalType === 'delete') {
-        await workerAPI.delete(selectedWorker.workerId);
       }
       
       setShowModal(false);
@@ -123,7 +118,6 @@ const WorkerDashboard = () => {
     switch (modalType) {
       case 'create': return 'Add New Worker';
       case 'edit': return 'Edit Worker';
-      case 'delete': return 'Delete Worker';
       default: return '';
     }
   };
@@ -144,7 +138,7 @@ const WorkerDashboard = () => {
     return (
       <div className="text-center py-5">
         <Spinner animation="border" variant="primary" />
-        <p className="mt-2">Loading workers...</p>
+        <p className={`mt-2 ${theme === 'dark' ? 'text-light' : ''}`}>Loading workers...</p>
       </div>
     );
   }
@@ -152,7 +146,7 @@ const WorkerDashboard = () => {
   return (
     <div>
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="fw-bold">Worker Management</h2>
+        <h2 className={`fw-bold ${theme === 'dark' ? 'text-light' : ''}`}>Worker Management</h2>
         <Button variant="success" onClick={handleCreate}>
           <Plus size={18} className="me-2" />
           Add Worker
@@ -168,85 +162,93 @@ const WorkerDashboard = () => {
       {/* Summary Cards */}
       <Row className="mb-4">
         <Col md={2} className="mb-3">
-          <Card className="border-0 shadow-sm">
+          <Card className={`border-0 shadow-sm ${theme === 'dark' ? 'text-light' : ''}`}
+                style={{ backgroundColor: theme === 'dark' ? '#495057' : '#f8f9fa' }}>
             <Card.Body className="text-center">
               <Users className="text-primary mb-2" size={24} />
               <h4 className="mb-0 fw-bold">{workers.length}</h4>
-              <small className="text-muted">Total Workers</small>
+              <small className={theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}>Total Workers</small>
             </Card.Body>
           </Card>
         </Col>
         <Col md={2} className="mb-3">
-          <Card className="border-0 shadow-sm">
+          <Card className={`border-0 shadow-sm ${theme === 'dark' ? 'text-light' : ''}`}
+                style={{ backgroundColor: theme === 'dark' ? '#495057' : '#f8f9fa' }}>
             <Card.Body className="text-center">
               <div className="text-success mb-2">●</div>
               <h4 className="mb-0 fw-bold">{stats.available}</h4>
-              <small className="text-muted">Available</small>
+              <small className={theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}>Available</small>
             </Card.Body>
           </Card>
         </Col>
         <Col md={2} className="mb-3">
-          <Card className="border-0 shadow-sm">
+          <Card className={`border-0 shadow-sm ${theme === 'dark' ? 'text-light' : ''}`}
+                style={{ backgroundColor: theme === 'dark' ? '#495057' : '#f8f9fa' }}>
             <Card.Body className="text-center">
               <div className="text-primary mb-2">●</div>
               <h4 className="mb-0 fw-bold">{stats.occupied}</h4>
-              <small className="text-muted">Occupied</small>
+              <small className={theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}>Occupied</small>
             </Card.Body>
           </Card>
         </Col>
         <Col md={2} className="mb-3">
-          <Card className="border-0 shadow-sm">
+          <Card className={`border-0 shadow-sm ${theme === 'dark' ? 'text-light' : ''}`}
+                style={{ backgroundColor: theme === 'dark' ? '#495057' : '#f8f9fa' }}>
             <Card.Body className="text-center">
               <div className="text-danger mb-2">●</div>
               <h4 className="mb-0 fw-bold">{stats.absent}</h4>
-              <small className="text-muted">Absent</small>
+              <small className={theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}>Absent</small>
             </Card.Body>
           </Card>
         </Col>
         <Col md={2} className="mb-3">
-          <Card className="border-0 shadow-sm">
+          <Card className={`border-0 shadow-sm ${theme === 'dark' ? 'text-light' : ''}`}
+                style={{ backgroundColor: theme === 'dark' ? '#495057' : '#f8f9fa' }}>
             <Card.Body className="text-center">
               <div className="text-info mb-2">●</div>
               <h4 className="mb-0 fw-bold">{stats.sanitaryWorkers}</h4>
-              <small className="text-muted">Sanitary Workers</small>
+              <small className={theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}>Sanitary Workers</small>
             </Card.Body>
           </Card>
         </Col>
         <Col md={2} className="mb-3">
-          <Card className="border-0 shadow-sm">
+          <Card className={`border-0 shadow-sm ${theme === 'dark' ? 'text-light' : ''}`}
+                style={{ backgroundColor: theme === 'dark' ? '#495057' : '#f8f9fa' }}>
             <Card.Body className="text-center">
               <div className="text-warning mb-2">●</div>
               <h4 className="mb-0 fw-bold">{stats.schedulers}</h4>
-              <small className="text-muted">Schedulers</small>
+              <small className={theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}>Schedulers</small>
             </Card.Body>
           </Card>
         </Col>
       </Row>
 
       {/* Search and Table */}
-      <Card className="border-0 shadow-sm">
-        <Card.Header className="bg-white border-0">
+      <Card className={`border-0 shadow-sm ${theme === 'dark' ? 'text-light' : ''}`}
+            style={{ backgroundColor: theme === 'dark' ? '#495057' : '#f8f9fa' }}>
+        <Card.Header className="border-0"
+                     style={{ backgroundColor: theme === 'dark' ? '#495057' : '#f8f9fa' }}>
           <Row className="align-items-center">
             <Col>
               <h5 className="mb-0">All Workers</h5>
             </Col>
             <Col md={4}>
               <div className="position-relative">
-                <Search className="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted" size={16} />
+                <Search className={`position-absolute top-50 start-0 translate-middle-y ms-3 ${theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}`} size={16} />
                 <Form.Control
                   type="text"
                   placeholder="Search workers..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="ps-5"
+                  className={`ps-5 ${theme === 'dark' ? 'bg-secondary text-light border-secondary' : ''}`}
                 />
               </div>
             </Col>
           </Row>
         </Card.Header>
         <Card.Body className="p-0">
-          <Table responsive hover className="mb-0">
-            <thead className="bg-light">
+          <Table responsive hover className={`mb-0 ${theme === 'dark' ? 'table-dark' : ''}`}>
+            <thead className={theme === 'dark' ? 'bg-secondary' : 'bg-light'}>
               <tr>
                 <th>Worker ID</th>
                 <th>Name</th>
@@ -270,7 +272,7 @@ const WorkerDashboard = () => {
                           <Phone size={12} className="me-1" />
                           {worker.contactNumber}
                         </small>
-                        <small className="d-flex align-items-center text-muted">
+                        <small className={`d-flex align-items-center ${theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}`}>
                           <Mail size={12} className="me-1" />
                           {worker.contactEmail}
                         </small>
@@ -287,28 +289,19 @@ const WorkerDashboard = () => {
                       </Badge>
                     </td>
                     <td>
-                      <div className="d-flex gap-2">
-                        <Button
-                          variant="outline-primary"
-                          size="sm"
-                          onClick={() => handleEdit(worker)}
-                        >
-                          <Edit size={14} />
-                        </Button>
-                        <Button
-                          variant="outline-danger"
-                          size="sm"
-                          onClick={() => handleDelete(worker)}
-                        >
-                          <Trash2 size={14} />
-                        </Button>
-                      </div>
+                      <Button
+                        variant="outline-primary"
+                        size="sm"
+                        onClick={() => handleEdit(worker)}
+                      >
+                        <Edit size={14} />
+                      </Button>
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan="6" className="text-center py-4 text-muted">
+                  <td colSpan="6" className={`text-center py-4 ${theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}`}>
                     {searchTerm ? 'No workers found matching your search' : 'No workers found'}
                   </td>
                 </tr>
@@ -319,107 +312,100 @@ const WorkerDashboard = () => {
       </Card>
 
       {/* Modal */}
-      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-        <Modal.Header closeButton>
+      <Modal show={showModal} onHide={() => setShowModal(false)} centered
+             contentClassName={theme === 'dark' ? 'bg-dark text-light' : ''}>
+        <Modal.Header closeButton className={theme === 'dark' ? 'bg-dark text-light border-secondary' : ''}>
           <Modal.Title>{getModalTitle()}</Modal.Title>
         </Modal.Header>
         <Form onSubmit={handleSubmit}>
-          <Modal.Body>
-            {modalType === 'delete' ? (
-              <div>
-                <p>Are you sure you want to delete this worker?</p>
-                <div className="bg-light p-3 rounded">
-                  <strong>{selectedWorker?.workerId} - {selectedWorker?.name}</strong>
-                  <br />
-                  <small className="text-muted">Email: {selectedWorker?.contactEmail}</small>
-                </div>
-              </div>
-            ) : (
-              <>
-                <Form.Group className="mb-3">
-                  <Form.Label>Full Name</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Enter worker's full name"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    required
-                  />
-                </Form.Group>
-                
-                <Form.Group className="mb-3">
-                  <Form.Label>Contact Number</Form.Label>
-                  <Form.Control
-                    type="tel"
-                    placeholder="Enter 10-digit contact number"
-                    value={formData.contactNumber}
-                    onChange={(e) => setFormData({ ...formData, contactNumber: e.target.value })}
-                    pattern="[0-9]{10}"
-                    title="Please enter a 10-digit contact number"
-                    required
-                  />
-                </Form.Group>
-                
-                <Form.Group className="mb-3">
-                  <Form.Label>Email Address</Form.Label>
-                  <Form.Control
-                    type="email"
-                    placeholder="Enter email address"
-                    value={formData.contactEmail}
-                    onChange={(e) => setFormData({ ...formData, contactEmail: e.target.value })}
-                    required
-                  />
-                </Form.Group>
-                
-                <Form.Group className="mb-3">
-                  <Form.Label>Role</Form.Label>
-                  <Form.Select
-                    value={formData.roleId}
-                    onChange={(e) => setFormData({ ...formData, roleId: e.target.value })}
-                    required
-                  >
-                    <option value="">Select role</option>
-                    {roles.map((role) => (
-                      <option key={role.id} value={role.id}>
-                        {role.name}
-                      </option>
-                    ))}
-                  </Form.Select>
-                </Form.Group>
-                
-                <Form.Group className="mb-3">
-                  <Form.Label>Status</Form.Label>
-                  <Form.Select
-                    value={formData.workerStatus}
-                    onChange={(e) => setFormData({ ...formData, workerStatus: e.target.value })}
-                    required
-                  >
-                    {workerStatuses.map((status) => (
-                      <option key={status} value={status}>
-                        {status}
-                      </option>
-                    ))}
-                  </Form.Select>
-                </Form.Group>
-              </>
-            )}
+          <Modal.Body className={theme === 'dark' ? 'bg-dark' : ''}>
+            <Form.Group className="mb-3">
+              <Form.Label>Full Name</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter worker's full name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                className={theme === 'dark' ? 'bg-secondary text-light border-secondary' : ''}
+                required
+              />
+            </Form.Group>
+            
+            <Form.Group className="mb-3">
+              <Form.Label>Contact Number</Form.Label>
+              <Form.Control
+                type="tel"
+                placeholder="Enter 10-digit contact number"
+                value={formData.contactNumber}
+                onChange={(e) => setFormData({ ...formData, contactNumber: e.target.value })}
+                className={theme === 'dark' ? 'bg-secondary text-light border-secondary' : ''}
+                pattern="[0-9]{10}"
+                title="Please enter a 10-digit contact number"
+                required
+              />
+            </Form.Group>
+            
+            <Form.Group className="mb-3">
+              <Form.Label>Email Address</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Enter email address"
+                value={formData.contactEmail}
+                onChange={(e) => setFormData({ ...formData, contactEmail: e.target.value })}
+                className={theme === 'dark' ? 'bg-secondary text-light border-secondary' : ''}
+                required
+              />
+            </Form.Group>
+            
+            <Form.Group className="mb-3">
+              <Form.Label>Role</Form.Label>
+              <Form.Select
+                value={formData.roleId}
+                onChange={(e) => setFormData({ ...formData, roleId: e.target.value })}
+                className={theme === 'dark' ? 'bg-secondary text-light border-secondary' : ''}
+                required
+              >
+                <option value="">Select role</option>
+                {roles.map((role) => (
+                  <option key={role.id} value={role.id}>
+                    {role.name}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+            
+            <Form.Group className="mb-3">
+              <Form.Label>Status</Form.Label>
+              <Form.Select
+                value={formData.workerStatus}
+                onChange={(e) => setFormData({ ...formData, workerStatus: e.target.value })}
+                className={theme === 'dark' ? 'bg-secondary text-light border-secondary' : ''}
+                required
+              >
+                {workerStatuses.map((status) => (
+                  <option key={status} value={status}>
+                    {status}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
           </Modal.Body>
-          <Modal.Footer>
+          <Modal.Footer className={theme === 'dark' ? 'bg-dark border-secondary' : ''}>
             <Button variant="secondary" onClick={() => setShowModal(false)}>
               Cancel
             </Button>
             <Button
               type="submit"
-              variant={modalType === 'delete' ? 'danger' : 'success'}
+              variant="success"
               disabled={submitting}
             >
               {submitting ? (
                 <>
                   <Spinner animation="border" size="sm" className="me-2" />
-                  {modalType === 'delete' ? 'Deleting...' : 'Saving...'}
+                  Saving...
                 </>
               ) : (
-                modalType === 'delete' ? 'Delete' : 'Save'
+                'Save'
               )}
             </Button>
           </Modal.Footer>
@@ -430,4 +416,3 @@ const WorkerDashboard = () => {
 };
 
 export default WorkerDashboard;
-

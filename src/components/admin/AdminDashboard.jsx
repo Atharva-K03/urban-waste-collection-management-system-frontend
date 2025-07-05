@@ -57,7 +57,7 @@ const AdminDashboard = () => {
   };
 
   const SidebarContent = () => (
-    <div className="h-100 d-flex flex-column">
+    <div className={`h-100 d-flex flex-column ${theme === 'dark' ? 'bg-dark text-light' : 'bg-white'}`}>
       <Nav className="flex-column p-3 flex-grow-1">
         {menuItems.map((item) => {
           const IconComponent = item.icon;
@@ -65,13 +65,21 @@ const AdminDashboard = () => {
             <Nav.Link
               key={item.id}
               className={`d-flex align-items-center py-3 px-3 mb-1 rounded ${
-                activeView === item.id ? 'bg-success text-white' : 'text-dark hover-bg-light'
+                activeView === item.id 
+                  ? 'bg-success text-white' 
+                  : theme === 'dark' 
+                    ? 'text-light hover-bg-secondary' 
+                    : 'text-dark hover-bg-light'
               }`}
               onClick={() => {
                 setActiveView(item.id);
                 setShowSidebar(false);
               }}
-              style={{ cursor: 'pointer', transition: 'all 0.2s ease' }}
+              style={{ 
+                cursor: 'pointer', 
+                transition: 'all 0.2s ease',
+                backgroundColor: activeView === item.id ? '' : theme === 'dark' && 'transparent'
+              }}
             >
               <IconComponent size={18} className="me-3" />
               {item.label}
@@ -83,21 +91,25 @@ const AdminDashboard = () => {
   );
 
   return (
-    <div className="min-vh-100 bg-light">
-      {/* Horizontal Navbar */}
-      <Navbar bg="white" className="border-bottom shadow-sm" style={{ zIndex: 1030 }}>
+    <div className={`min-vh-100 ${theme === 'dark' ? 'bg-dark text-light' : 'bg-light'}`}>
+      {/* Fixed Horizontal Navbar */}
+      <Navbar 
+        fixed="top"
+        className={`border-bottom shadow-sm ${theme === 'dark' ? 'bg-dark border-secondary' : 'bg-white'}`} 
+        style={{ zIndex: 1030 }}
+      >
         <Container fluid>
           {/* Left side - Hamburger menu and Brand */}
           <div className="d-flex align-items-center">
             <Button
-              variant="outline-secondary"
+              variant={theme === 'dark' ? 'outline-light' : 'outline-secondary'}
               className="me-3"
               onClick={() => setShowSidebar(true)}
               style={{ border: 'none' }}
             >
               <Menu size={20} />
             </Button>
-            <Navbar.Brand className="d-flex align-items-center mb-0">
+            <Navbar.Brand className={`d-flex align-items-center mb-0 ${theme === 'dark' ? 'text-light' : ''}`}>
               <Recycle size={28} className="text-success me-2" />
               <span className="fw-bold">WasteWise Admin</span>
             </Navbar.Brand>
@@ -106,7 +118,7 @@ const AdminDashboard = () => {
           {/* Right side - Theme toggle and logout */}
           <div className="d-flex align-items-center gap-2">
             <Button
-              variant="outline-secondary"
+              variant={theme === 'dark' ? 'outline-light' : 'outline-secondary'}
               size="sm"
               onClick={toggleTheme}
               className="d-flex align-items-center"
@@ -133,17 +145,32 @@ const AdminDashboard = () => {
         onHide={() => setShowSidebar(false)}
         placement="start"
         style={{ width: '280px' }}
+        className={theme === 'dark' ? 'bg-dark' : ''}
       >
-        <Offcanvas.Header closeButton className="border-bottom">
-          <Offcanvas.Title>Navigation Menu</Offcanvas.Title>
+        <Offcanvas.Header 
+          className={`border-bottom ${theme === 'dark' ? 'bg-dark text-light border-secondary' : ''}`}
+        >
+          <Offcanvas.Title className={theme === 'dark' ? 'text-light' : ''}>
+            Navigation Menu
+          </Offcanvas.Title>
+          <Button
+            variant={theme === 'dark' ? 'outline-light' : 'outline-secondary'}
+            size="sm"
+            onClick={() => setShowSidebar(false)}
+            className="ms-auto"
+            style={{ border: 'none' }}
+            aria-label="Close"
+          >
+            X
+          </Button>
         </Offcanvas.Header>
         <Offcanvas.Body className="p-0">
           <SidebarContent />
         </Offcanvas.Body>
       </Offcanvas>
 
-      {/* Main Content */}
-      <div className="flex-grow-1">
+      {/* Main Content with top padding to account for fixed navbar */}
+      <div className="flex-grow-1" style={{ paddingTop: '70px' }}>
         <Container fluid className="p-4">
           {renderContent()}
         </Container>

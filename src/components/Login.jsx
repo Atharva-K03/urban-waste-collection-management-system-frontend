@@ -42,7 +42,7 @@ const AuthPage = () => {
         else navigate('/wastewise/worker');
       } else {
         if (!resetPassword) {
-          throw new Error("resetPassword() isn’t defined in your AuthContext");
+          throw new Error("resetPassword() isn't defined in your AuthContext");
         }
         if (newPassword !== confirmPassword) {
           throw new Error('Passwords do not match');
@@ -56,6 +56,31 @@ const AuthPage = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Gradient style for cards in dark mode
+  const getCardStyle = () => {
+    if (theme === 'dark') {
+      return {
+        background: 'linear-gradient(135deg, #E0F7FA 0%, #E8F5E9 100%)',
+        color: '#333',
+        border: 'none'
+      };
+    }
+    return {};
+  };
+
+  // Main auth card style
+  const getAuthCardStyle = () => {
+    if (theme === 'dark') {
+      return {
+        background: 'linear-gradient(135deg, #E0F7FA 0%, #E8F5E9 100%)',
+        color: '#333',
+        border: 'none',
+        maxWidth: 400
+      };
+    }
+    return { maxWidth: 400 };
   };
 
   return (
@@ -74,20 +99,35 @@ const AuthPage = () => {
             md={6}
             className="d-none d-md-flex flex-column justify-content-center px-5"
           >
-            <h1 className="display-3 fw-bold mb-4 text-success">WasteWise</h1>
-            <p className="fs-5 mb-5 text-muted">Smart Waste Management</p>
+            <h1 className={`display-3 fw-bold mb-4 ${theme === 'dark' ? 'text-light' : 'text-success'}`}>
+              WasteWise
+            </h1>
+            <p className={`fs-5 mb-5 ${theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}`}>
+              Smart Waste Management
+            </p>
 
             {[
               { icon: <Truck size={28} />, title: 'Smart Scheduling', sub: 'Optimize routes' },
               { icon: <Shield size={28} />, title: 'Secure Access', sub: 'Role‑based auth' },
               { icon: <Users size={28} />, title: 'Team Management', sub: 'Coordinate staff' },
             ].map((c, i) => (
-              <Card key={i} className="mb-4 shadow-sm rounded-4 border-0" style={{ maxWidth: 300 }}>
+              <Card 
+                key={i} 
+                className="mb-4 shadow-sm rounded-4 border-0" 
+                style={{ 
+                  maxWidth: 300,
+                  ...getCardStyle()
+                }}
+              >
                 <Card.Body className="d-flex align-items-center">
                   <div className="text-success me-3">{c.icon}</div>
                   <div>
-                    <h5 className="mb-1">{c.title}</h5>
-                    <small className="text-muted">{c.sub}</small>
+                    <h5 className="mb-1" style={{ color: theme === 'dark' ? '#333' : 'inherit' }}>
+                      {c.title}
+                    </h5>
+                    <small style={{ color: theme === 'dark' ? '#666' : 'inherit' }} className={theme === 'light' ? 'text-muted' : ''}>
+                      {c.sub}
+                    </small>
                   </div>
                 </Card.Body>
               </Card>
@@ -96,10 +136,15 @@ const AuthPage = () => {
 
           {/* Right Auth Form */}
           <Col xs={12} md={6} className="d-flex justify-content-center align-items-center p-4">
-            <Card className="shadow-lg rounded-4 w-100" style={{ maxWidth: 400 }}>
+            <Card 
+              className="shadow-lg rounded-4 w-100" 
+              style={getAuthCardStyle()}
+            >
               <Card.Body className="p-4">
                 <div className="d-flex justify-content-between align-items-center mb-3">
-                  <h3 className="mb-0">{mode === 'login' ? 'Sign In' : 'Reset Password'}</h3>
+                  <h3 className="mb-0" style={{ color: theme === 'dark' ? '#333' : 'inherit' }}>
+                    {mode === 'login' ? 'Sign In' : 'Reset Password'}
+                  </h3>
                   <Button variant="outline-secondary" size="sm" onClick={toggleTheme}>
                     {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
                   </Button>
@@ -114,7 +159,10 @@ const AuthPage = () => {
                   <Nav.Item>
                     <Nav.Link
                       eventKey="login"
-                      style={{ fontWeight: 'bold', color: 'black' }}
+                      style={{ 
+                        fontWeight: 'bold', 
+                        color: theme === 'dark' ? '#333' : 'black' 
+                      }}
                     >
                       Login
                     </Nav.Link>
@@ -122,7 +170,10 @@ const AuthPage = () => {
                   <Nav.Item>
                     <Nav.Link
                       eventKey="reset"
-                      style={{ fontWeight: 'bold', color: 'black' }}
+                      style={{ 
+                        fontWeight: 'bold', 
+                        color: theme === 'dark' ? '#333' : 'black' 
+                      }}
                     >
                       Reset
                     </Nav.Link>
@@ -133,7 +184,9 @@ const AuthPage = () => {
 
                 <Form onSubmit={handleSubmit}>
                   <Form.Group className="mb-3">
-                    <Form.Label>Worker ID</Form.Label>
+                    <Form.Label style={{ color: theme === 'dark' ? '#333' : 'inherit' }}>
+                      Worker ID
+                    </Form.Label>
                     <Form.Control
                       type="text"
                       placeholder="W001"
@@ -141,40 +194,66 @@ const AuthPage = () => {
                       onChange={(e) => setWorkerId(e.target.value)}
                       required
                       pattern="^W\d{3}$"
+                      style={theme === 'dark' ? {
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        border: '1px solid #ccc',
+                        color: '#333'
+                      } : {}}
                     />
                   </Form.Group>
 
                   {mode === 'login' ? (
                     <Form.Group className="mb-4">
-                      <Form.Label>Password</Form.Label>
+                      <Form.Label style={{ color: theme === 'dark' ? '#333' : 'inherit' }}>
+                        Password
+                      </Form.Label>
                       <Form.Control
                         type="password"
                         placeholder="Enter password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
+                        style={theme === 'dark' ? {
+                          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                          border: '1px solid #ccc',
+                          color: '#333'
+                        } : {}}
                       />
                     </Form.Group>
                   ) : (
                     <>
                       <Form.Group className="mb-3">
-                        <Form.Label>New Password</Form.Label>
+                        <Form.Label style={{ color: theme === 'dark' ? '#333' : 'inherit' }}>
+                          New Password
+                        </Form.Label>
                         <Form.Control
                           type="password"
                           placeholder="New password"
                           value={newPassword}
                           onChange={(e) => setNewPassword(e.target.value)}
                           required
+                          style={theme === 'dark' ? {
+                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                            border: '1px solid #ccc',
+                            color: '#333'
+                          } : {}}
                         />
                       </Form.Group>
                       <Form.Group className="mb-4">
-                        <Form.Label>Confirm Password</Form.Label>
+                        <Form.Label style={{ color: theme === 'dark' ? '#333' : 'inherit' }}>
+                          Confirm Password
+                        </Form.Label>
                         <Form.Control
                           type="password"
                           placeholder="Confirm password"
                           value={confirmPassword}
                           onChange={(e) => setConfirmPassword(e.target.value)}
                           required
+                          style={theme === 'dark' ? {
+                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                            border: '1px solid #ccc',
+                            color: '#333'
+                          } : {}}
                         />
                       </Form.Group>
                     </>

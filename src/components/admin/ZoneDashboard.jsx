@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Table, Button, Modal, Form, Alert, Spinner, Badge } from 'react-bootstrap';
+import { useTheme } from '../../contexts/ThemeContext';
 import { zoneAPI } from '../../services/api';
 import { Plus, Edit, Trash2, MapPin, Search } from 'lucide-react';
 
 const ZoneDashboard = () => {
+  const { theme } = useTheme();
   const [zones, setZones] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -92,7 +94,7 @@ const ZoneDashboard = () => {
     return (
       <div className="text-center py-5">
         <Spinner animation="border" variant="primary" />
-        <p className="mt-2">Loading zones...</p>
+        <p className={`mt-2 ${theme === 'dark' ? 'text-light' : ''}`}>Loading zones...</p>
       </div>
     );
   }
@@ -100,7 +102,7 @@ const ZoneDashboard = () => {
   return (
     <div>
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="fw-bold">Zone Management</h2>
+        <h2 className={`fw-bold ${theme === 'dark' ? 'text-light' : ''}`}>Zone Management</h2>
         <Button variant="success" onClick={handleCreate}>
           <Plus size={18} className="me-2" />
           Create Zone
@@ -116,20 +118,22 @@ const ZoneDashboard = () => {
       {/* Summary Cards */}
       <Row className="mb-4">
         <Col md={4} className="mb-3">
-          <Card className="border-0 shadow-sm">
+          <Card className={`border-0 shadow-sm ${theme === 'dark' ? 'text-light' : ''}`} 
+                style={{ backgroundColor: theme === 'dark' ? '#495057' : '#f8f9fa' }}>
             <Card.Body className="d-flex align-items-center">
               <div className="bg-primary bg-opacity-10 p-3 rounded me-3">
                 <MapPin className="text-primary" size={24} />
               </div>
               <div>
                 <h3 className="mb-0 fw-bold">{zones.length}</h3>
-                <small className="text-muted">Total Zones</small>
+                <small className={theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}>Total Zones</small>
               </div>
             </Card.Body>
           </Card>
         </Col>
         <Col md={4} className="mb-3">
-          <Card className="border-0 shadow-sm">
+          <Card className={`border-0 shadow-sm ${theme === 'dark' ? 'text-light' : ''}`}
+                style={{ backgroundColor: theme === 'dark' ? '#495057' : '#f8f9fa' }}>
             <Card.Body className="d-flex align-items-center">
               <div className="bg-success bg-opacity-10 p-3 rounded me-3">
                 <MapPin className="text-success" size={24} />
@@ -138,13 +142,14 @@ const ZoneDashboard = () => {
                 <h3 className="mb-0 fw-bold">
                   {zones.reduce((sum, zone) => sum + zone.areaCoverage, 0).toFixed(1)}
                 </h3>
-                <small className="text-muted">Total Area Coverage</small>
+                <small className={theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}>Total Area Coverage</small>
               </div>
             </Card.Body>
           </Card>
         </Col>
         <Col md={4} className="mb-3">
-          <Card className="border-0 shadow-sm">
+          <Card className={`border-0 shadow-sm ${theme === 'dark' ? 'text-light' : ''}`}
+                style={{ backgroundColor: theme === 'dark' ? '#495057' : '#f8f9fa' }}>
             <Card.Body className="d-flex align-items-center">
               <div className="bg-info bg-opacity-10 p-3 rounded me-3">
                 <MapPin className="text-info" size={24} />
@@ -153,7 +158,7 @@ const ZoneDashboard = () => {
                 <h3 className="mb-0 fw-bold">
                   {zones.length > 0 ? (zones.reduce((sum, zone) => sum + zone.areaCoverage, 0) / zones.length).toFixed(1) : 0}
                 </h3>
-                <small className="text-muted">Average Area</small>
+                <small className={theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}>Average Area</small>
               </div>
             </Card.Body>
           </Card>
@@ -161,29 +166,31 @@ const ZoneDashboard = () => {
       </Row>
 
       {/* Search and Table */}
-      <Card className="border-0 shadow-sm">
-        <Card.Header className="bg-white border-0">
+      <Card className={`border-0 shadow-sm ${theme === 'dark' ? 'text-light' : ''}`}
+            style={{ backgroundColor: theme === 'dark' ? '#495057' : '#f8f9fa' }}>
+        <Card.Header className="border-0" 
+                     style={{ backgroundColor: theme === 'dark' ? '#495057' : '#f8f9fa' }}>
           <Row className="align-items-center">
             <Col>
               <h5 className="mb-0">All Zones</h5>
             </Col>
             <Col md={4}>
               <div className="position-relative">
-                <Search className="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted" size={16} />
+                <Search className={`position-absolute top-50 start-0 translate-middle-y ms-3 ${theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}`} size={16} />
                 <Form.Control
                   type="text"
                   placeholder="Search zones..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="ps-5"
+                  className={`ps-5 ${theme === 'dark' ? 'bg-secondary text-light border-secondary' : ''}`}
                 />
               </div>
             </Col>
           </Row>
         </Card.Header>
         <Card.Body className="p-0">
-          <Table responsive hover className="mb-0">
-            <thead className="bg-light">
+          <Table responsive hover className={`mb-0 ${theme === 'dark' ? 'table-dark' : ''}`}>
+            <thead className={theme === 'dark' ? 'bg-secondary' : 'bg-light'}>
               <tr>
                 <th>Zone ID</th>
                 <th>Zone Name</th>
@@ -224,7 +231,7 @@ const ZoneDashboard = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="5" className="text-center py-4 text-muted">
+                  <td colSpan="5" className={`text-center py-4 ${theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}`}>
                     {searchTerm ? 'No zones found matching your search' : 'No zones found'}
                   </td>
                 </tr>
@@ -235,19 +242,24 @@ const ZoneDashboard = () => {
       </Card>
 
       {/* Modal */}
-      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-        <Modal.Header closeButton>
+      <Modal 
+        show={showModal} 
+        onHide={() => setShowModal(false)} 
+        centered
+        contentClassName={theme === 'dark' ? 'bg-dark text-light' : ''}
+      >
+        <Modal.Header closeButton className={theme === 'dark' ? 'bg-dark text-light border-secondary' : ''}>
           <Modal.Title>{getModalTitle()}</Modal.Title>
         </Modal.Header>
         <Form onSubmit={handleSubmit}>
-          <Modal.Body>
+          <Modal.Body className={theme === 'dark' ? 'bg-dark' : ''}>
             {modalType === 'delete' ? (
               <div>
                 <p>Are you sure you want to delete this zone?</p>
-                <div className="bg-light p-3 rounded">
+                <div className={`p-3 rounded ${theme === 'dark' ? 'bg-secondary text-light' : 'bg-light'}`}>
                   <strong>{selectedZone?.zoneId} - {selectedZone?.zoneName}</strong>
                   <br />
-                  <small className="text-muted">Area Coverage: {selectedZone?.areaCoverage} sq km</small>
+                  <small className={theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}>Area Coverage: {selectedZone?.areaCoverage} sq km</small>
                 </div>
               </div>
             ) : (
@@ -259,6 +271,7 @@ const ZoneDashboard = () => {
                     placeholder="Enter zone name"
                     value={formData.zoneName}
                     onChange={(e) => setFormData({ ...formData, zoneName: e.target.value })}
+                    className={theme === 'dark' ? 'bg-secondary text-light border-secondary' : ''}
                     required
                   />
                 </Form.Group>
@@ -271,13 +284,14 @@ const ZoneDashboard = () => {
                     placeholder="Enter area coverage"
                     value={formData.areaCoverage}
                     onChange={(e) => setFormData({ ...formData, areaCoverage: e.target.value })}
+                    className={theme === 'dark' ? 'bg-secondary text-light border-secondary' : ''}
                     required
                   />
                 </Form.Group>
               </>
             )}
           </Modal.Body>
-          <Modal.Footer>
+          <Modal.Footer className={theme === 'dark' ? 'bg-dark border-secondary' : ''}>
             <Button variant="secondary" onClick={() => setShowModal(false)}>
               Cancel
             </Button>
@@ -303,4 +317,3 @@ const ZoneDashboard = () => {
 };
 
 export default ZoneDashboard;
-

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Table, Button, Modal, Form, Alert, Spinner, Badge } from 'react-bootstrap';
+import { useTheme } from '../../contexts/ThemeContext';
 import { routeAPI, zoneAPI } from '../../services/api';
 import { Plus, Edit, Trash2, Route, Search, MapPin } from 'lucide-react';
 
 const RouteDashboard = () => {
+  const { theme } = useTheme();
   const [routes, setRoutes] = useState([]);
   const [zones, setZones] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -122,7 +124,7 @@ const RouteDashboard = () => {
     return (
       <div className="text-center py-5">
         <Spinner animation="border" variant="primary" />
-        <p className="mt-2">Loading routes...</p>
+        <p className={`mt-2 ${theme === 'dark' ? 'text-light' : ''}`}>Loading routes...</p>
       </div>
     );
   }
@@ -130,7 +132,7 @@ const RouteDashboard = () => {
   return (
     <div>
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="fw-bold">Route Management</h2>
+        <h2 className={`fw-bold ${theme === 'dark' ? 'text-light' : ''}`}>Route Management</h2>
         <Button variant="success" onClick={handleCreate}>
           <Plus size={18} className="me-2" />
           Create Route
@@ -146,33 +148,36 @@ const RouteDashboard = () => {
       {/* Summary Cards */}
       <Row className="mb-4">
         <Col md={4} className="mb-3">
-          <Card className="border-0 shadow-sm">
+          <Card className={`border-0 shadow-sm ${theme === 'dark' ? 'text-light' : ''}`}
+                style={{ backgroundColor: theme === 'dark' ? '#495057' : '#f8f9fa' }}>
             <Card.Body className="d-flex align-items-center">
               <div className="bg-primary bg-opacity-10 p-3 rounded me-3">
                 <Route className="text-primary" size={24} />
               </div>
               <div>
                 <h3 className="mb-0 fw-bold">{routes.length}</h3>
-                <small className="text-muted">Total Routes</small>
+                <small className={theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}>Total Routes</small>
               </div>
             </Card.Body>
           </Card>
         </Col>
         <Col md={4} className="mb-3">
-          <Card className="border-0 shadow-sm">
+          <Card className={`border-0 shadow-sm ${theme === 'dark' ? 'text-light' : ''}`}
+                style={{ backgroundColor: theme === 'dark' ? '#495057' : '#f8f9fa' }}>
             <Card.Body className="d-flex align-items-center">
               <div className="bg-success bg-opacity-10 p-3 rounded me-3">
                 <MapPin className="text-success" size={24} />
               </div>
               <div>
                 <h3 className="mb-0 fw-bold">{zones.length}</h3>
-                <small className="text-muted">Covered Zones</small>
+                <small className={theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}>Covered Zones</small>
               </div>
             </Card.Body>
           </Card>
         </Col>
         <Col md={4} className="mb-3">
-          <Card className="border-0 shadow-sm">
+          <Card className={`border-0 shadow-sm ${theme === 'dark' ? 'text-light' : ''}`}
+                style={{ backgroundColor: theme === 'dark' ? '#495057' : '#f8f9fa' }}>
             <Card.Body className="d-flex align-items-center">
               <div className="bg-info bg-opacity-10 p-3 rounded me-3">
                 <Route className="text-info" size={24} />
@@ -181,7 +186,7 @@ const RouteDashboard = () => {
                 <h3 className="mb-0 fw-bold">
                   {routes.length > 0 ? Math.round(routes.reduce((sum, route) => sum + route.estimatedTime, 0) / routes.length) : 0}
                 </h3>
-                <small className="text-muted">Avg. Time (min)</small>
+                <small className={theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}>Avg. Time (min)</small>
               </div>
             </Card.Body>
           </Card>
@@ -189,29 +194,31 @@ const RouteDashboard = () => {
       </Row>
 
       {/* Search and Table */}
-      <Card className="border-0 shadow-sm">
-        <Card.Header className="bg-white border-0">
+      <Card className={`border-0 shadow-sm ${theme === 'dark' ? 'text-light' : ''}`}
+            style={{ backgroundColor: theme === 'dark' ? '#495057' : '#f8f9fa' }}>
+        <Card.Header className="border-0"
+                     style={{ backgroundColor: theme === 'dark' ? '#495057' : '#f8f9fa' }}>
           <Row className="align-items-center">
             <Col>
               <h5 className="mb-0">All Routes</h5>
             </Col>
             <Col md={4}>
               <div className="position-relative">
-                <Search className="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted" size={16} />
+                <Search className={`position-absolute top-50 start-0 translate-middle-y ms-3 ${theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}`} size={16} />
                 <Form.Control
                   type="text"
                   placeholder="Search routes..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="ps-5"
+                  className={`ps-5 ${theme === 'dark' ? 'bg-secondary text-light border-secondary' : ''}`}
                 />
               </div>
             </Col>
           </Row>
         </Card.Header>
         <Card.Body className="p-0">
-          <Table responsive hover className="mb-0">
-            <thead className="bg-light">
+          <Table responsive hover className={`mb-0 ${theme === 'dark' ? 'table-dark' : ''}`}>
+            <thead className={theme === 'dark' ? 'bg-secondary' : 'bg-light'}>
               <tr>
                 <th>Route ID</th>
                 <th>Route Name</th>
@@ -235,7 +242,7 @@ const RouteDashboard = () => {
                       </Badge>
                     </td>
                     <td>
-                      <small className="text-muted">
+                      <small className={theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}>
                         {route.pickupPoints ? route.pickupPoints.substring(0, 50) + '...' : 'No points'}
                       </small>
                     </td>
@@ -262,7 +269,7 @@ const RouteDashboard = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="6" className="text-center py-4 text-muted">
+                  <td colSpan="6" className={`text-center py-4 ${theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}`}>
                     {searchTerm ? 'No routes found matching your search' : 'No routes found'}
                   </td>
                 </tr>
@@ -273,19 +280,25 @@ const RouteDashboard = () => {
       </Card>
 
       {/* Modal */}
-      <Modal show={showModal} onHide={() => setShowModal(false)} centered size="lg">
-        <Modal.Header closeButton>
+      <Modal 
+        show={showModal} 
+        onHide={() => setShowModal(false)} 
+        centered 
+        size="lg"
+        contentClassName={theme === 'dark' ? 'bg-dark text-light' : ''}
+      >
+        <Modal.Header closeButton className={theme === 'dark' ? 'bg-dark text-light border-secondary' : ''}>
           <Modal.Title>{getModalTitle()}</Modal.Title>
         </Modal.Header>
         <Form onSubmit={handleSubmit}>
-          <Modal.Body>
+          <Modal.Body className={theme === 'dark' ? 'bg-dark' : ''}>
             {modalType === 'delete' ? (
               <div>
                 <p>Are you sure you want to delete this route?</p>
-                <div className="bg-light p-3 rounded">
+                <div className={`p-3 rounded ${theme === 'dark' ? 'bg-secondary text-light' : 'bg-light'}`}>
                   <strong>{selectedRoute?.routeId} - {selectedRoute?.routeName}</strong>
                   <br />
-                  <small className="text-muted">Zone: {selectedRoute?.zoneId}</small>
+                  <small className={theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}>Zone: {selectedRoute?.zoneId}</small>
                 </div>
               </div>
             ) : (
@@ -296,6 +309,7 @@ const RouteDashboard = () => {
                     <Form.Select
                       value={formData.zoneId}
                       onChange={(e) => setFormData({ ...formData, zoneId: e.target.value })}
+                      className={theme === 'dark' ? 'bg-secondary text-light border-secondary' : ''}
                       required
                     >
                       <option value="">Select a zone</option>
@@ -315,6 +329,7 @@ const RouteDashboard = () => {
                     placeholder="Enter route name"
                     value={formData.routeName}
                     onChange={(e) => setFormData({ ...formData, routeName: e.target.value })}
+                    className={theme === 'dark' ? 'bg-secondary text-light border-secondary' : ''}
                     required
                   />
                 </Form.Group>
@@ -327,8 +342,9 @@ const RouteDashboard = () => {
                     placeholder="Enter pickup points (comma-separated)"
                     value={formData.pickupPoints}
                     onChange={(e) => setFormData({ ...formData, pickupPoints: e.target.value })}
+                    className={theme === 'dark' ? 'bg-secondary text-light border-secondary' : ''}
                   />
-                  <Form.Text className="text-muted">
+                  <Form.Text className={theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}>
                     Enter pickup points separated by commas (e.g., Point A, Point B, Point C)
                   </Form.Text>
                 </Form.Group>
@@ -341,13 +357,14 @@ const RouteDashboard = () => {
                     placeholder="Enter estimated time in minutes"
                     value={formData.estimatedTime}
                     onChange={(e) => setFormData({ ...formData, estimatedTime: e.target.value })}
+                    className={theme === 'dark' ? 'bg-secondary text-light border-secondary' : ''}
                     required
                   />
                 </Form.Group>
               </>
             )}
           </Modal.Body>
-          <Modal.Footer>
+          <Modal.Footer className={theme === 'dark' ? 'bg-dark border-secondary' : ''}>
             <Button variant="secondary" onClick={() => setShowModal(false)}>
               Cancel
             </Button>
@@ -373,4 +390,3 @@ const RouteDashboard = () => {
 };
 
 export default RouteDashboard;
-

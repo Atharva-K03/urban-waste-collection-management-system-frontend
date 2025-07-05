@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Table, Button, Modal, Form, Alert, Spinner, Badge } from 'react-bootstrap';
+import { useTheme } from '../../contexts/ThemeContext';
 import { vehicleAPI } from '../../services/api';
 import { Plus, Edit, Trash2, Truck, Search, Settings } from 'lucide-react';
 
 const VehicleDashboard = () => {
+  const { theme } = useTheme();
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -52,9 +54,7 @@ const VehicleDashboard = () => {
   const handleEdit = (vehicle) => {
     setModalType('edit');
     setFormData({
-      //added vehicle-id for updatevehicle
-      vehicleId: vehicle.vehicleId, // <--- Add this line
-      //added vehicle-id for updatevehicle
+      vehicleId: vehicle.vehicleId,
       registrationNo: vehicle.registrationNo,
       type: vehicle.type,
       status: vehicle.status
@@ -126,12 +126,11 @@ const VehicleDashboard = () => {
 
   const getVehicleStats = () => {
     const available = vehicles.filter(v => v.status === 'AVAILABLE').length;
-    const assigned = vehicles.filter(v => v.status === 'ASSIGNED').length;
     const maintenance = vehicles.filter(v => v.status === 'UNDER_MAINTENANCE').length;
     const pickupTrucks = vehicles.filter(v => v.type === 'PICKUP_TRUCK').length;
     const routeTrucks = vehicles.filter(v => v.type === 'ROUTE_TRUCK').length;
 
-    return { available, assigned, maintenance, pickupTrucks, routeTrucks };
+    return { available, maintenance, pickupTrucks, routeTrucks };
   };
 
   const stats = getVehicleStats();
@@ -140,7 +139,7 @@ const VehicleDashboard = () => {
     return (
       <div className="text-center py-5">
         <Spinner animation="border" variant="primary" />
-        <p className="mt-2">Loading vehicles...</p>
+        <p className={`mt-2 ${theme === 'dark' ? 'text-light' : ''}`}>Loading vehicles...</p>
       </div>
     );
   }
@@ -148,7 +147,7 @@ const VehicleDashboard = () => {
   return (
     <div>
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="fw-bold">Vehicle Management</h2>
+        <h2 className={`fw-bold ${theme === 'dark' ? 'text-light' : ''}`}>Vehicle Management</h2>
         <Button variant="success" onClick={handleCreate}>
           <Plus size={18} className="me-2" />
           Add Vehicle
@@ -161,88 +160,86 @@ const VehicleDashboard = () => {
         </Alert>
       )}
 
-      {/* Summary Cards */}
+      {/* Summary Cards - All cards now use the same column size */}
       <Row className="mb-4">
         <Col md={2} className="mb-3">
-          <Card className="border-0 shadow-sm">
+          <Card className={`border-0 shadow-sm ${theme === 'dark' ? 'text-light' : ''}`}
+                style={{ backgroundColor: theme === 'dark' ? '#495057' : '#f8f9fa' }}>
             <Card.Body className="text-center">
               <Truck className="text-primary mb-2" size={24} />
               <h4 className="mb-0 fw-bold">{vehicles.length}</h4>
-              <small className="text-muted">Total Vehicles</small>
+              <small className={theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}>Total Vehicles</small>
             </Card.Body>
           </Card>
         </Col>
         <Col md={2} className="mb-3">
-          <Card className="border-0 shadow-sm">
+          <Card className={`border-0 shadow-sm ${theme === 'dark' ? 'text-light' : ''}`}
+                style={{ backgroundColor: theme === 'dark' ? '#495057' : '#f8f9fa' }}>
             <Card.Body className="text-center">
               <div className="text-success mb-2">●</div>
               <h4 className="mb-0 fw-bold">{stats.available}</h4>
-              <small className="text-muted">Available</small>
+              <small className={theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}>Available</small>
             </Card.Body>
           </Card>
         </Col>
         <Col md={2} className="mb-3">
-          <Card className="border-0 shadow-sm">
-            <Card.Body className="text-center">
-              <div className="text-primary mb-2">●</div>
-              <h4 className="mb-0 fw-bold">{stats.assigned}</h4>
-              <small className="text-muted">Assigned</small>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col md={2} className="mb-3">
-          <Card className="border-0 shadow-sm">
+          <Card className={`border-0 shadow-sm ${theme === 'dark' ? 'text-light' : ''}`}
+                style={{ backgroundColor: theme === 'dark' ? '#495057' : '#f8f9fa' }}>
             <Card.Body className="text-center">
               <div className="text-warning mb-2">●</div>
               <h4 className="mb-0 fw-bold">{stats.maintenance}</h4>
-              <small className="text-muted">Maintenance</small>
+              <small className={theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}>Maintenance</small>
             </Card.Body>
           </Card>
         </Col>
         <Col md={2} className="mb-3">
-          <Card className="border-0 shadow-sm">
+          <Card className={`border-0 shadow-sm ${theme === 'dark' ? 'text-light' : ''}`}
+                style={{ backgroundColor: theme === 'dark' ? '#495057' : '#f8f9fa' }}>
             <Card.Body className="text-center">
               <div className="text-info mb-2">●</div>
               <h4 className="mb-0 fw-bold">{stats.pickupTrucks}</h4>
-              <small className="text-muted">Pickup Trucks</small>
+              <small className={theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}>Pickup Trucks</small>
             </Card.Body>
           </Card>
         </Col>
         <Col md={2} className="mb-3">
-          <Card className="border-0 shadow-sm">
+          <Card className={`border-0 shadow-sm ${theme === 'dark' ? 'text-light' : ''}`}
+                style={{ backgroundColor: theme === 'dark' ? '#495057' : '#f8f9fa' }}>
             <Card.Body className="text-center">
               <div className="text-primary mb-2">●</div>
               <h4 className="mb-0 fw-bold">{stats.routeTrucks}</h4>
-              <small className="text-muted">Route Trucks</small>
+              <small className={theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}>Route Trucks</small>
             </Card.Body>
           </Card>
         </Col>
       </Row>
 
       {/* Search and Table */}
-      <Card className="border-0 shadow-sm">
-        <Card.Header className="bg-white border-0">
+      <Card className={`border-0 shadow-sm ${theme === 'dark' ? 'text-light' : ''}`}
+            style={{ backgroundColor: theme === 'dark' ? '#495057' : '#f8f9fa' }}>
+        <Card.Header className="border-0"
+                     style={{ backgroundColor: theme === 'dark' ? '#495057' : '#f8f9fa' }}>
           <Row className="align-items-center">
             <Col>
               <h5 className="mb-0">All Vehicles</h5>
             </Col>
             <Col md={4}>
               <div className="position-relative">
-                <Search className="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted" size={16} />
+                <Search className={`position-absolute top-50 start-0 translate-middle-y ms-3 ${theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}`} size={16} />
                 <Form.Control
                   type="text"
                   placeholder="Search vehicles..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="ps-5"
+                  className={`ps-5 ${theme === 'dark' ? 'bg-secondary text-light border-secondary' : ''}`}
                 />
               </div>
             </Col>
           </Row>
         </Card.Header>
         <Card.Body className="p-0">
-          <Table responsive hover className="mb-0">
-            <thead className="bg-light">
+          <Table responsive hover className={`mb-0 ${theme === 'dark' ? 'table-dark' : ''}`}>
+            <thead className={theme === 'dark' ? 'bg-secondary' : 'bg-light'}>
               <tr>
                 <th>Vehicle ID</th>
                 <th>Registration No</th>
@@ -291,7 +288,7 @@ const VehicleDashboard = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="5" className="text-center py-4 text-muted">
+                  <td colSpan="5" className={`text-center py-4 ${theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}`}>
                     {searchTerm ? 'No vehicles found matching your search' : 'No vehicles found'}
                   </td>
                 </tr>
@@ -302,19 +299,24 @@ const VehicleDashboard = () => {
       </Card>
 
       {/* Modal */}
-      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-        <Modal.Header closeButton>
+      <Modal 
+        show={showModal} 
+        onHide={() => setShowModal(false)} 
+        centered
+        contentClassName={theme === 'dark' ? 'bg-dark text-light' : ''}
+      >
+        <Modal.Header closeButton className={theme === 'dark' ? 'bg-dark text-light border-secondary' : ''}>
           <Modal.Title>{getModalTitle()}</Modal.Title>
         </Modal.Header>
         <Form onSubmit={handleSubmit}>
-          <Modal.Body>
+          <Modal.Body className={theme === 'dark' ? 'bg-dark' : ''}>
             {modalType === 'delete' ? (
               <div>
                 <p>Are you sure you want to delete this vehicle?</p>
-                <div className="bg-light p-3 rounded">
+                <div className={`p-3 rounded ${theme === 'dark' ? 'bg-secondary text-light' : 'bg-light'}`}>
                   <strong>{selectedVehicle?.vehicleId} - {selectedVehicle?.registrationNo}</strong>
                   <br />
-                  <small className="text-muted">Type: {selectedVehicle?.type?.replace('_', ' ')}</small>
+                  <small className={theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}>Type: {selectedVehicle?.type?.replace('_', ' ')}</small>
                 </div>
               </div>
             ) : (
@@ -326,6 +328,7 @@ const VehicleDashboard = () => {
                     placeholder="Enter registration number (e.g., KA01AB1234)"
                     value={formData.registrationNo}
                     onChange={(e) => setFormData({ ...formData, registrationNo: e.target.value })}
+                    className={theme === 'dark' ? 'bg-secondary text-light border-secondary' : ''}
                     required
                   />
                 </Form.Group>
@@ -335,6 +338,7 @@ const VehicleDashboard = () => {
                   <Form.Select
                     value={formData.type}
                     onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                    className={theme === 'dark' ? 'bg-secondary text-light border-secondary' : ''}
                     required
                   >
                     <option value="">Select vehicle type</option>
@@ -351,6 +355,7 @@ const VehicleDashboard = () => {
                   <Form.Select
                     value={formData.status}
                     onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                    className={theme === 'dark' ? 'bg-secondary text-light border-secondary' : ''}
                     required
                   >
                     {vehicleStatuses.map((status) => (
@@ -363,7 +368,7 @@ const VehicleDashboard = () => {
               </>
             )}
           </Modal.Body>
-          <Modal.Footer>
+          <Modal.Footer className={theme === 'dark' ? 'bg-dark border-secondary' : ''}>
             <Button variant="secondary" onClick={() => setShowModal(false)}>
               Cancel
             </Button>
@@ -389,4 +394,3 @@ const VehicleDashboard = () => {
 };
 
 export default VehicleDashboard;
-

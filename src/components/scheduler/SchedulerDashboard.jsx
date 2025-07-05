@@ -230,7 +230,7 @@ const SchedulerDashboard = () => {
     return (
       <div className="text-center py-5">
         <Spinner animation="border" variant="primary" />
-        <p className="mt-2">Loading scheduler dashboard...</p>
+        <p className={`mt-2 ${theme === 'dark' ? 'text-light' : ''}`}>Loading scheduler dashboard...</p>
       </div>
     );
   }
@@ -239,18 +239,18 @@ const SchedulerDashboard = () => {
   const todaysPickupsCount = getTodaysPickups();
 
   return (
-    <div className="min-vh-100 bg-light">
+    <div className={`min-vh-100 ${theme === 'dark' ? 'bg-dark text-light' : 'bg-light'}`}>
       {/* Header */}
-      <Navbar bg="white" className="border-bottom">
+      <Navbar className={`border-bottom ${theme === 'dark' ? 'bg-dark border-secondary' : 'bg-white'}`}>
         <Container fluid>
-          <Navbar.Brand>
+          <Navbar.Brand className={theme === 'dark' ? 'text-light' : ''}>
             <Recycle size={24} className="text-success me-2" />
             WasteWise Scheduler
           </Navbar.Brand>
           <div className="d-flex align-items-center gap-2">
-            <span className="text-muted me-2">Welcome, {user?.workerId}</span>
+            <span className={`me-2 ${theme === 'dark' ? 'text-light' : 'text-muted'}`}>Welcome, {user?.workerId}</span>
             <Button
-              variant="outline-secondary"
+              variant={theme === 'dark' ? 'outline-light' : 'outline-secondary'}
               size="sm"
               onClick={toggleTheme}
             >
@@ -269,7 +269,7 @@ const SchedulerDashboard = () => {
 
       <Container fluid className="p-4">
         <div className="d-flex justify-content-between align-items-center mb-4">
-          <h2 className="fw-bold">Pickup Scheduling</h2>
+          <h2 className={`fw-bold ${theme === 'dark' ? 'text-light' : ''}`}>Pickup Scheduling</h2>
           <Button variant="success" onClick={handleCreate}>
             <Plus size={18} className="me-2" />
             Schedule Pickup
@@ -285,53 +285,57 @@ const SchedulerDashboard = () => {
         {/* Summary Cards */}
         <Row className="mb-4">
           <Col md={3} className="mb-3">
-            <Card className="border-0 shadow-sm">
+            <Card className={`border-0 shadow-sm ${theme === 'dark' ? 'text-light' : ''}`} 
+                  style={{ backgroundColor: theme === 'dark' ? '#495057' : '#f8f9fa' }}>
               <Card.Body className="d-flex align-items-center">
                 <div className="bg-success bg-opacity-10 p-3 rounded me-3">
                   <Calendar className="text-success" size={24} />
                 </div>
                 <div>
                   <h3 className="mb-0 fw-bold">{dailyCount}</h3>
-                  <small className="text-muted">Daily Pickups</small>
+                  <small className={theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}>Daily Pickups</small>
                 </div>
               </Card.Body>
             </Card>
           </Col>
           <Col md={3} className="mb-3">
-            <Card className="border-0 shadow-sm">
+            <Card className={`border-0 shadow-sm ${theme === 'dark' ? 'text-light' : ''}`}
+                  style={{ backgroundColor: theme === 'dark' ? '#495057' : '#f8f9fa' }}>
               <Card.Body className="d-flex align-items-center">
                 <div className="bg-warning bg-opacity-10 p-3 rounded me-3">
                   <RotateCcw className="text-warning" size={24} />
                 </div>
                 <div>
                   <h3 className="mb-0 fw-bold">{weeklyCount}</h3>
-                  <small className="text-muted">Weekly Pickups</small>
+                  <small className={theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}>Weekly Pickups</small>
                 </div>
               </Card.Body>
             </Card>
           </Col>
           <Col md={3} className="mb-3">
-            <Card className="border-0 shadow-sm">
+            <Card className={`border-0 shadow-sm ${theme === 'dark' ? 'text-light' : ''}`}
+                  style={{ backgroundColor: theme === 'dark' ? '#495057' : '#f8f9fa' }}>
               <Card.Body className="d-flex align-items-center">
                 <div className="bg-primary bg-opacity-10 p-3 rounded me-3">
                   <CalendarDays className="text-primary" size={24} />
                 </div>
                 <div>
                   <h3 className="mb-0 fw-bold">{monthlyCount}</h3>
-                  <small className="text-muted">Monthly Pickups</small>
+                  <small className={theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}>Monthly Pickups</small>
                 </div>
               </Card.Body>
             </Card>
           </Col>
           <Col md={3} className="mb-3">
-            <Card className="border-0 shadow-sm">
+            <Card className={`border-0 shadow-sm ${theme === 'dark' ? 'text-light' : ''}`}
+                  style={{ backgroundColor: theme === 'dark' ? '#495057' : '#f8f9fa' }}>
               <Card.Body className="d-flex align-items-center">
                 <div className="bg-info bg-opacity-10 p-3 rounded me-3">
                   <Clock className="text-info" size={24} />
                 </div>
                 <div>
                   <h3 className="mb-0 fw-bold">{todaysPickupsCount}</h3>
-                  <small className="text-muted">Today's Pickups</small>
+                  <small className={theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}>Today's Pickups</small>
                 </div>
               </Card.Body>
             </Card>
@@ -339,29 +343,31 @@ const SchedulerDashboard = () => {
         </Row>
 
         {/* Search and Table */}
-        <Card className="border-0 shadow-sm">
-          <Card.Header className="bg-white border-0">
+        <Card className={`border-0 shadow-sm ${theme === 'dark' ? 'text-light' : ''}`}
+              style={{ backgroundColor: theme === 'dark' ? '#495057' : '#f8f9fa' }}>
+          <Card.Header className="border-0" 
+                       style={{ backgroundColor: theme === 'dark' ? '#495057' : '#f8f9fa' }}>
             <Row className="align-items-center">
               <Col>
                 <h5 className="mb-0">All Pickup Schedules</h5>
               </Col>
               <Col md={4}>
                 <div className="position-relative">
-                  <Search className="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted" size={16} />
+                  <Search className={`position-absolute top-50 start-0 translate-middle-y ms-3 ${theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}`} size={16} />
                   <Form.Control
                     type="text"
                     placeholder="Search pickups..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="ps-5"
+                    className={`ps-5 ${theme === 'dark' ? 'bg-secondary text-white border-secondary' : ''}`}
                   />
                 </div>
               </Col>
             </Row>
           </Card.Header>
           <Card.Body className="p-0">
-            <Table responsive hover className="mb-0">
-              <thead className="bg-light">
+            <Table responsive hover className={`mb-0 ${theme === 'dark' ? 'table-dark' : ''}`}>
+              <thead className={theme === 'dark' ? 'bg-secondary' : 'bg-light'}>
                 <tr>
                   <th>Pickup ID</th>
                   <th>Location</th>
@@ -425,7 +431,7 @@ const SchedulerDashboard = () => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="9" className="text-center py-4 text-muted">
+                    <td colSpan="9" className={`text-center py-4 ${theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}`}>
                       {searchTerm ? 'No pickups found matching your search' : 'No pickups scheduled'}
                     </td>
                   </tr>
@@ -436,19 +442,25 @@ const SchedulerDashboard = () => {
         </Card>
 
         {/* Modal */}
-        <Modal show={showModal} onHide={() => setShowModal(false)} centered size="lg">
-          <Modal.Header closeButton>
+        <Modal 
+          show={showModal} 
+          onHide={() => setShowModal(false)} 
+          centered 
+          size="lg"
+          contentClassName={theme === 'dark' ? 'bg-dark text-light' : ''}
+        >
+          <Modal.Header closeButton className={theme === 'dark' ? 'bg-dark text-light border-secondary' : ''}>
             <Modal.Title>{getModalTitle()}</Modal.Title>
           </Modal.Header>
           <Form onSubmit={handleSubmit}>
-            <Modal.Body>
+            <Modal.Body className={theme === 'dark' ? 'bg-dark' : ''}>
               {modalType === 'delete' ? (
                 <div>
                   <p>Are you sure you want to cancel this pickup?</p>
-                  <div className="bg-light p-3 rounded">
+                  <div className={`p-3 rounded ${theme === 'dark' ? 'bg-secondary text-light' : 'bg-light'}`}>
                     <strong>{selectedPickup?.id} - {selectedPickup?.locationName}</strong>
                     <br />
-                    <small className="text-muted">Zone: {selectedPickup?.zoneId}</small>
+                    <small className={theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}>Zone: {selectedPickup?.zoneId}</small>
                   </div>
                 </div>
               ) : (
@@ -459,6 +471,7 @@ const SchedulerDashboard = () => {
                       <Form.Select
                         value={formData.zoneId}
                         onChange={(e) => setFormData({ ...formData, zoneId: e.target.value })}
+                        className={theme === 'dark' ? 'bg-secondary text-light border-secondary' : ''}
                         required
                       >
                         <option value="">Select a zone</option>
@@ -478,6 +491,7 @@ const SchedulerDashboard = () => {
                         placeholder="Enter specific location"
                         value={formData.locationName}
                         onChange={(e) => setFormData({ ...formData, locationName: e.target.value })}
+                        className={theme === 'dark' ? 'bg-secondary text-light border-secondary' : ''}
                         required
                       />
                     </Form.Group>
@@ -489,6 +503,7 @@ const SchedulerDashboard = () => {
                         type="datetime-local"
                         value={formData.timeSlotStart}
                         onChange={(e) => setFormData({ ...formData, timeSlotStart: e.target.value })}
+                        className={theme === 'dark' ? 'bg-secondary text-light border-secondary' : ''}
                         required
                       />
                     </Form.Group>
@@ -500,6 +515,7 @@ const SchedulerDashboard = () => {
                         type="datetime-local"
                         value={formData.timeSlotEnd}
                         onChange={(e) => setFormData({ ...formData, timeSlotEnd: e.target.value })}
+                        className={theme === 'dark' ? 'bg-secondary text-light border-secondary' : ''}
                         required
                       />
                     </Form.Group>
@@ -510,6 +526,7 @@ const SchedulerDashboard = () => {
                       <Form.Select
                         value={formData.frequency}
                         onChange={(e) => setFormData({ ...formData, frequency: e.target.value })}
+                        className={theme === 'dark' ? 'bg-secondary text-light border-secondary' : ''}
                         required
                       >
                         <option value="">Select frequency</option>
@@ -525,6 +542,7 @@ const SchedulerDashboard = () => {
                       <Form.Select
                         value={formData.vehicleId}
                         onChange={(e) => setFormData({ ...formData, vehicleId: e.target.value })}
+                        className={theme === 'dark' ? 'bg-secondary text-light border-secondary' : ''}
                         required
                       >
                         <option value="">Select a vehicle</option>
@@ -542,6 +560,7 @@ const SchedulerDashboard = () => {
                       <Form.Select
                         value={formData.worker1Id}
                         onChange={(e) => setFormData({ ...formData, worker1Id: e.target.value })}
+                        className={theme === 'dark' ? 'bg-secondary text-light border-secondary' : ''}
                         required
                       >
                         <option value="">Select first worker</option>
@@ -559,6 +578,7 @@ const SchedulerDashboard = () => {
                       <Form.Select
                         value={formData.worker2Id}
                         onChange={(e) => setFormData({ ...formData, worker2Id: e.target.value })}
+                        className={theme === 'dark' ? 'bg-secondary text-light border-secondary' : ''}
                         required
                       >
                         <option value="">Select second worker</option>
@@ -573,7 +593,7 @@ const SchedulerDashboard = () => {
                 </Row>
               )}
             </Modal.Body>
-            <Modal.Footer>
+            <Modal.Footer className={theme === 'dark' ? 'bg-dark border-secondary' : ''}>
               <Button variant="secondary" onClick={() => setShowModal(false)}>
                 Cancel
               </Button>
@@ -600,3 +620,4 @@ const SchedulerDashboard = () => {
 };
 
 export default SchedulerDashboard;
+
