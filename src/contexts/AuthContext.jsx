@@ -39,6 +39,12 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const resetPassword = async (workerId, newPassword) => {
+    // calls your backend /reset-password endpoint
+    await authAPI.resetPassword({ workerId, newPassword });
+    // no need to update localStorage/token here
+  };
+
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
@@ -54,6 +60,7 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider value={{
       user,
       login,
+      resetPassword,
       logout,
       isAdmin,
       isScheduler,

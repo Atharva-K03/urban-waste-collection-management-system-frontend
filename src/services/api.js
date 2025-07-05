@@ -2,9 +2,6 @@ import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:8090';
 
-
-
-
 // Create axios instance
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -123,6 +120,7 @@ export const assignmentAPI = {
 export const pickupAPI = {
   getAll: () => api.get('/wastewise/scheduler/pickups'),
   getById: (id) => api.get(`/wastewise/scheduler/pickups/${id}`),
+  getByWorkerId: (workerId) => api.get(`/wastewise/scheduler/pickups/pickupinfo/${workerId}`),
   create: (data) => api.post('/wastewise/scheduler/pickups', data),
   update: (id, data) => api.put(`/wastewise/scheduler/pickups/update/${id}`, data),
   delete: (id) => api.delete(`/wastewise/scheduler/pickups/${id}`)
@@ -141,4 +139,3 @@ export const wasteLogsAPI = {
 };
 
 export default api;
-
