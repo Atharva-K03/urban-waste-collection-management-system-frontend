@@ -52,6 +52,9 @@ const VehicleDashboard = () => {
   const handleEdit = (vehicle) => {
     setModalType('edit');
     setFormData({
+      //added vehicle-id for updatevehicle
+      vehicleId: vehicle.vehicleId, // <--- Add this line
+      //added vehicle-id for updatevehicle
       registrationNo: vehicle.registrationNo,
       type: vehicle.type,
       status: vehicle.status
