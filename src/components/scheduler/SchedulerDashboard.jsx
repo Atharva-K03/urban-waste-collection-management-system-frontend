@@ -12,7 +12,10 @@ import {
   Trash2, 
   Calendar,
   Search,
-  Recycle
+  Recycle,
+  Clock,
+  RotateCcw,
+  CalendarDays
 } from 'lucide-react';
 
 const SchedulerDashboard = () => {
@@ -67,6 +70,50 @@ const SchedulerDashboard = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Calculate pickup counts by frequency
+  const getPickupCountsByFrequency = () => {
+    const dailyCount = pickups.filter(p => p.frequency === 'DAILY').length;
+    const weeklyCount = pickups.filter(p => p.frequency === 'WEEKLY').length;
+    const monthlyCount = pickups.filter(p => p.frequency === 'MONTHLY').length;
+    
+    return { dailyCount, weeklyCount, monthlyCount };
+  };
+
+  // Calculate today's pickups based on frequency and schedule
+  const getTodaysPickups = () => {
+    const today = new Date();
+    const todayDateString = today.toDateString();
+    
+    return pickups.filter(pickup => {
+      const pickupDate = new Date(pickup.timeSlotStart);
+      const pickupDateString = pickupDate.toDateString();
+      
+      // Check if pickup is scheduled for today based on frequency
+      switch (pickup.frequency) {
+        case 'DAILY':
+          // Daily pickups happen every day from the start date
+          return pickupDate <= today;
+          
+        case 'WEEKLY':
+          // Weekly pickups happen on the same day of the week
+          const daysDifference = Math.floor((today - pickupDate) / (1000 * 60 * 60 * 24));
+          return daysDifference >= 0 && daysDifference % 7 === 0;
+          
+        case 'MONTHLY':
+          // Monthly pickups happen on the same date each month
+          const monthsDifference = (today.getFullYear() - pickupDate.getFullYear()) * 12 + 
+                                  (today.getMonth() - pickupDate.getMonth());
+          return monthsDifference >= 0 && 
+                 today.getDate() === pickupDate.getDate() && 
+                 monthsDifference >= 0;
+          
+        default:
+          // For any other frequency, check if it's exactly today
+          return pickupDateString === todayDateString;
+      }
+    }).length;
   };
 
   const handleCreate = () => {
@@ -146,6 +193,15 @@ const SchedulerDashboard = () => {
     }
   };
 
+  const getFrequencyBadgeVariant = (frequency) => {
+    switch (frequency) {
+      case 'DAILY': return 'success';
+      case 'WEEKLY': return 'warning';
+      case 'MONTHLY': return 'primary';
+      default: return 'secondary';
+    }
+  };
+
   const getZoneName = (zoneId) => {
     const zone = zones.find(z => z.zoneId === zoneId);
     return zone ? zone.zoneName : zoneId;
@@ -178,6 +234,9 @@ const SchedulerDashboard = () => {
       </div>
     );
   }
+
+  const { dailyCount, weeklyCount, monthlyCount } = getPickupCountsByFrequency();
+  const todaysPickupsCount = getTodaysPickups();
 
   return (
     <div className="min-vh-100 bg-light">
@@ -228,12 +287,12 @@ const SchedulerDashboard = () => {
           <Col md={3} className="mb-3">
             <Card className="border-0 shadow-sm">
               <Card.Body className="d-flex align-items-center">
-                <div className="bg-primary bg-opacity-10 p-3 rounded me-3">
-                  <Calendar className="text-primary" size={24} />
+                <div className="bg-success bg-opacity-10 p-3 rounded me-3">
+                  <Calendar className="text-success" size={24} />
                 </div>
                 <div>
-                  <h3 className="mb-0 fw-bold">{pickups.length}</h3>
-                  <small className="text-muted">Total Pickups</small>
+                  <h3 className="mb-0 fw-bold">{dailyCount}</h3>
+                  <small className="text-muted">Daily Pickups</small>
                 </div>
               </Card.Body>
             </Card>
@@ -242,13 +301,11 @@ const SchedulerDashboard = () => {
             <Card className="border-0 shadow-sm">
               <Card.Body className="d-flex align-items-center">
                 <div className="bg-warning bg-opacity-10 p-3 rounded me-3">
-                  <Calendar className="text-warning" size={24} />
+                  <RotateCcw className="text-warning" size={24} />
                 </div>
                 <div>
-                  <h3 className="mb-0 fw-bold">
-                    {pickups.filter(p => p.status === 'IN_PROGRESS').length}
-                  </h3>
-                  <small className="text-muted">In Progress</small>
+                  <h3 className="mb-0 fw-bold">{weeklyCount}</h3>
+                  <small className="text-muted">Weekly Pickups</small>
                 </div>
               </Card.Body>
             </Card>
@@ -256,14 +313,12 @@ const SchedulerDashboard = () => {
           <Col md={3} className="mb-3">
             <Card className="border-0 shadow-sm">
               <Card.Body className="d-flex align-items-center">
-                <div className="bg-success bg-opacity-10 p-3 rounded me-3">
-                  <Calendar className="text-success" size={24} />
+                <div className="bg-primary bg-opacity-10 p-3 rounded me-3">
+                  <CalendarDays className="text-primary" size={24} />
                 </div>
                 <div>
-                  <h3 className="mb-0 fw-bold">
-                    {pickups.filter(p => p.status === 'COMPLETED').length}
-                  </h3>
-                  <small className="text-muted">Completed</small>
+                  <h3 className="mb-0 fw-bold">{monthlyCount}</h3>
+                  <small className="text-muted">Monthly Pickups</small>
                 </div>
               </Card.Body>
             </Card>
@@ -272,13 +327,11 @@ const SchedulerDashboard = () => {
             <Card className="border-0 shadow-sm">
               <Card.Body className="d-flex align-items-center">
                 <div className="bg-info bg-opacity-10 p-3 rounded me-3">
-                  <Calendar className="text-info" size={24} />
+                  <Clock className="text-info" size={24} />
                 </div>
                 <div>
-                  <h3 className="mb-0 fw-bold">
-                    {pickups.filter(p => p.status === 'SCHEDULED').length}
-                  </h3>
-                  <small className="text-muted">Scheduled</small>
+                  <h3 className="mb-0 fw-bold">{todaysPickupsCount}</h3>
+                  <small className="text-muted">Today's Pickups</small>
                 </div>
               </Card.Body>
             </Card>
@@ -317,7 +370,6 @@ const SchedulerDashboard = () => {
                   <th>Frequency</th>
                   <th>Vehicle</th>
                   <th>Workers</th>
-                  <th>Status</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -341,7 +393,7 @@ const SchedulerDashboard = () => {
                         </small>
                       </td>
                       <td>
-                        <Badge bg="info" className="fw-normal">{pickup.frequency}</Badge>
+                        <Badge bg={getFrequencyBadgeVariant(pickup.frequency)} className="fw-normal">{pickup.frequency}</Badge>
                       </td>
                       <td>{getVehicleInfo(pickup.vehicleId)}</td>
                       <td>
@@ -350,11 +402,7 @@ const SchedulerDashboard = () => {
                           {getWorkerName(pickup.worker2Id)}
                         </small>
                       </td>
-                      <td>
-                        <Badge bg={getStatusBadgeVariant(pickup.status)} className="fw-normal">
-                          {pickup.status}
-                        </Badge>
-                      </td>
+                      
                       <td>
                         <div className="d-flex gap-2">
                           <Button
@@ -552,4 +600,3 @@ const SchedulerDashboard = () => {
 };
 
 export default SchedulerDashboard;
-
