@@ -11,7 +11,6 @@ import {
 } from 'react-bootstrap';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
-import { pickupAPI } from '../../services/api';
 import {
   MapPin,
   Clock,
@@ -23,6 +22,7 @@ import {
   Recycle,
   Map
 } from 'lucide-react';
+import { pickupAPI } from '../../services/api';
 
 const WorkerDashboard = () => {
   const [pickup, setPickup] = useState(null);
@@ -50,21 +50,22 @@ const WorkerDashboard = () => {
     return (
       <div className="d-flex justify-content-center align-items-center vh-100">
         <Spinner animation="border" variant="primary" />
+        <p className={`mt-2 ${theme === 'dark' ? 'text-light' : ''}`}>Loading pickup job...</p>
       </div>
     );
   }
 
   return (
-    <div className={`min-vh-100 ${theme === 'light' ? 'bg-light' : 'bg-dark text-white'}`}>
-      <Navbar bg="white" className="border-bottom">
+    <div className={`min-vh-100 ${theme === 'dark' ? 'bg-dark text-white' : 'bg-light'}`}>
+      <Navbar className={`border-bottom ${theme === 'dark' ? 'bg-dark border-secondary' : 'bg-white'}`}>
         <Container fluid>
-          <Navbar.Brand>
+          <Navbar.Brand className={theme === 'dark' ? 'text-light' : ''}>
             <Recycle size={24} className="text-success me-2" />
             WasteWise Worker
           </Navbar.Brand>
           <div className="d-flex align-items-center gap-2">
-            <span className="text-muted">Welcome, {user.workerId}</span>
-            <Button variant="outline-secondary" size="sm" onClick={toggleTheme}>
+            <span className={`me-2 ${theme === 'dark' ? 'text-light' : 'text-muted'}`}>Welcome, {user.workerId}</span>
+            <Button variant={theme === 'dark' ? 'outline-light' : 'outline-secondary'} size="sm" onClick={toggleTheme}>
               {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
             </Button>
             <Button variant="outline-danger" size="sm" onClick={logout}>
@@ -79,10 +80,11 @@ const WorkerDashboard = () => {
 
         {pickup ? (
           <Card
-            className="mx-auto shadow-lg rounded-4 py-3"
-            style={{ maxWidth: 600, borderRadius: '2rem' }}
+            className={`mx-auto shadow-lg rounded-4 py-3 ${theme === 'dark' ? 'text-light' : ''}`}
+            style={{ maxWidth: 600, borderRadius: '2rem', backgroundColor: theme === 'dark' ? '#495057' : '#f8f9fa' }}
           >
-            <Card.Header className="bg-white text-center py-3 rounded-top-4">
+            <Card.Header className="text-center py-3 rounded-top-4 border-0" 
+                         style={{ backgroundColor: theme === 'dark' ? '#495057' : '#f8f9fa' }}>
               <h4 className="mb-0">Today’s Pickup Job</h4>
             </Card.Header>
             <Card.Body className="py-3">
@@ -99,14 +101,14 @@ const WorkerDashboard = () => {
                   </Col>
                   <Col xs={8} className="text-center">
                     <h5 className="mb-0">{value}</h5>
-                    <small className="text-muted">{label}</small>
+                    <small className={theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}>{label}</small>
                   </Col>
                 </Row>
               ))}
             </Card.Body>
           </Card>
         ) : (
-          <div className="text-center py-5 text-muted">
+          <div className={`text-center py-5 ${theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}`}>
             <MapPin size={64} className="opacity-50 mb-3" />
             <p>No pickup job assigned for today.</p>
           </div>
@@ -117,3 +119,4 @@ const WorkerDashboard = () => {
 };
 
 export default WorkerDashboard;
+
