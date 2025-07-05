@@ -111,14 +111,6 @@ const Login = () => {
                     )}
                   </Button>
                 </Form>
-
-                <div className="text-center mt-4">
-                  <small className="text-muted">
-                    Demo Credentials:<br />
-                    Admin: W001 / admin123<br />
-                    Worker: W002 / worker123
-                  </small>
-                </div>
               </Card.Body>
             </Card>
           </Col>
