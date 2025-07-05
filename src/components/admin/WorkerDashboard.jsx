@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Table, Button, Modal, Form, Alert, Spinner, Badge } from 'react-bootstrap';
 import { workerAPI } from '../../services/api';
 import { Plus, Edit, Trash2, Users, Search, Mail, Phone } from 'lucide-react';
-
+import { authAPI } from '../../services/api';
 const WorkerDashboard = () => {
   const [workers, setWorkers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -83,7 +83,7 @@ const WorkerDashboard = () => {
 
     try {
       if (modalType === 'create') {
-        await workerAPI.create(formData);
+        await workerAPI.create(formData);  
       } else if (modalType === 'edit') {
         await workerAPI.update(selectedWorker.workerId, formData);
       } else if (modalType === 'delete') {

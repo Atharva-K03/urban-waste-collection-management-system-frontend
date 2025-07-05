@@ -27,7 +27,7 @@ const Login = () => {
         navigate('/wastewise/admin');
       } else if (response.role === 'SCHEDULER') {
         navigate('/wastewise/scheduler');
-      } else if (response.role === 'WORKER') {
+      } else if (response.role === 'SANITARY_WORKER') {
         navigate('/wastewise/worker');
       }
     } catch (err) {

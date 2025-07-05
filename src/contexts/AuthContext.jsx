@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }) => {
 
   const isAdmin = () => user?.role === 'ADMIN';
   const isScheduler = () => user?.role === 'SCHEDULER';
-  const isWorker = () => user?.role === 'WORKER';
+  const isWorker = () => user?.role === 'SANITARY_WORKER';
 
   return (
     <AuthContext.Provider value={{

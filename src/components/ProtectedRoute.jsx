@@ -27,7 +27,7 @@ const ProtectedRoute = ({ children, adminOnly = false, schedulerOnly = false, wo
     return <Navigate to="/unauthorized" />;
   }
 
-  if (workerOnly && user.role !== 'WORKER') {
+  if (workerOnly && user.role !== 'SANITARY_WORKER') {
     return <Navigate to="/unauthorized" />;
   }
 
