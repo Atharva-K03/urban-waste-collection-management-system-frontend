@@ -24,8 +24,8 @@ const WorkerDashboard = () => {
   const [submitting, setSubmitting] = useState(false);
 
   const roles = [
-    { id: '002', name: 'Sanitary Worker' },
-    { id: '003', name: 'Scheduler' }
+    { id: '003', name: 'Sanitary Worker' },
+    { id: '002', name: 'Scheduler' }
   ];
   
   const workerStatuses = ['AVAILABLE', 'OCCUPIED', 'ABSENT'];
@@ -126,8 +126,8 @@ const WorkerDashboard = () => {
     const available = workers.filter(w => w.workerStatus === 'AVAILABLE').length;
     const occupied = workers.filter(w => w.workerStatus === 'OCCUPIED').length;
     const absent = workers.filter(w => w.workerStatus === 'ABSENT').length;
-    const sanitaryWorkers = workers.filter(w => w.roleId === '002').length;
-    const schedulers = workers.filter(w => w.roleId === '003').length;
+    const sanitaryWorkers = workers.filter(w => w.roleId === '003').length;
+    const schedulers = workers.filter(w => w.roleId === '002').length;
 
     return { available, occupied, absent, sanitaryWorkers, schedulers };
   };
