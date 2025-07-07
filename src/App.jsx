@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Router, Routes, Route, Navigate, HashRouter } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -13,7 +13,7 @@ function App() {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <Router>
+        <HashRouter>
           <div className="App">
             <Routes>
               {/* Public Routes */}
@@ -67,7 +67,7 @@ function App() {
               <Route path="*" element={<Navigate to="/login" replace />} />
             </Routes>
           </div>
-        </Router>
+        </HashRouter>
       </AuthProvider>
     </ThemeProvider>
   );
@@ -75,3 +75,4 @@ function App() {
 
 export default App;
 
+  

@@ -1,3 +1,87 @@
+/**
+ * SchedulerDashboard.jsx
+ * 
+ * This component serves as the main dashboard for managing pickup schedules in the WasteWise application.
+ * It provides functionality to view, create, edit, and delete pickup schedules, along with filtering and searching capabilities.
+ * The dashboard also displays summary statistics for daily, weekly, and monthly pickups, as well as today's pickups.
+ * 
+ * Features:
+ * - Fetch and display pickup schedules, vehicles, workers, and zones from the backend API.
+ * - Provide summary statistics for pickup frequencies.
+ * - Allow users to create, edit, and delete pickup schedules via a modal form.
+ * - Search and filter pickup schedules based on location, zone, or pickup ID.
+ * - Display pickup schedules in a responsive table with actions for editing and deleting.
+ * - Support light and dark themes, with dynamic styling based on the selected theme.
+ * - Handle authentication and logout functionality.
+ * 
+ * Dependencies:
+ * - React and React Bootstrap for UI components.
+ * - Axios for API requests.
+ * - Lucide React for icons.
+ * - Custom hooks (`useAuth`, `useTheme`) for authentication and theme management.
+ * 
+ * Props:
+ * - None
+ * 
+ * State Variables:
+ * - pickups: Array of pickup schedules fetched from the API.
+ * - vehicles: Array of vehicles fetched from the API.
+ * - workers: Array of workers fetched from the API.
+ * - zones: Array of zones fetched from the API.
+ * - loading: Boolean indicating whether data is being loaded.
+ * - error: String for error messages.
+ * - showModal: Boolean to control the visibility of the modal.
+ * - modalType: String indicating the type of modal ('create', 'edit', 'delete').
+ * - selectedPickup: Object representing the currently selected pickup for editing or deleting.
+ * - formData: Object containing form data for creating or editing a pickup schedule.
+ * - searchTerm: String for filtering pickup schedules.
+ * - submitting: Boolean indicating whether a form submission is in progress.
+ * 
+ * Functions:
+ * - loadData: Fetches pickups, vehicles, workers, and zones from the API.
+ * - getPickupCountsByFrequency: Calculates the count of pickups by frequency (daily, weekly, monthly).
+ * - getTodaysPickups: Calculates the count of pickups scheduled for today.
+ * - handleCreate: Opens the modal for creating a new pickup schedule.
+ * - handleEdit: Opens the modal for editing an existing pickup schedule.
+ * - handleDelete: Opens the modal for deleting a pickup schedule.
+ * - handleSubmit: Handles form submission for creating, editing, or deleting a pickup schedule.
+ * - getStatusBadgeVariant: Returns the badge variant for a pickup status.
+ * - getFrequencyBadgeVariant: Returns the badge variant for a pickup frequency.
+ * - getZoneName: Retrieves the name of a zone based on its ID.
+ * - getWorkerName: Retrieves the name of a worker based on their ID.
+ * - getVehicleInfo: Retrieves vehicle information based on its ID.
+ * - getModalTitle: Returns the title for the modal based on its type.
+ * 
+ * Components:
+ * - Navbar: Displays the application header with theme toggle and logout functionality.
+ * - Summary Cards: Displays statistics for daily, weekly, monthly, and today's pickups.
+ * - Search Bar: Allows users to filter pickup schedules.
+ * - Table: Displays pickup schedules with actions for editing and deleting.
+ * - Modal: Provides forms for creating, editing, or deleting pickup schedules.
+ * 
+ * Error Handling:
+ * - Displays an error message if data fails to load or an operation fails.
+ * 
+ * Theme Support:
+ * - Dynamically adjusts styling based on the selected theme (light or dark).
+ * 
+ * Usage:
+ * - Import and render the `SchedulerDashboard` component in your application.
+ * - Ensure the backend API endpoints are correctly configured and accessible.
+ * 
+ * Example:
+ * ```jsx
+ * import SchedulerDashboard from './SchedulerDashboard';
+ * 
+ * const App = () => {
+ *   return (
+ *     <SchedulerDashboard />
+ *   );
+ * };
+ * 
+ * export default App;
+ * ```
+ */
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Table, Button, Modal, Form, Alert, Spinner, Badge, Navbar } from 'react-bootstrap';
 import { useAuth } from '../../contexts/AuthContext';
