@@ -23,7 +23,9 @@ const WorkerDashboard = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
+
   const roles = [
+    { id: '001', name: 'Admin'},
     { id: '003', name: 'Sanitary Worker' },
     { id: '002', name: 'Scheduler' }
   ];
@@ -110,6 +112,7 @@ const WorkerDashboard = () => {
   };
 
   const getRoleName = (roleId) => {
+    console.log('Role id: ', roleId);
     const role = roles.find(r => r.id === roleId);
     return role ? role.name : 'Unknown';
   };
