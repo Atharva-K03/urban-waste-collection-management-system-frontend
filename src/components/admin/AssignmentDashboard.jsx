@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Table, Button, Modal, Form, Alert, Spinner, Badge } from 'react-bootstrap';
 import { assignmentAPI, vehicleAPI, routeAPI } from '../../services/api';
 import { Plus, Edit, Trash2, Calendar, Search } from 'lucide-react';
-
+ 
 const AssignmentDashboard = () => {
   const [assignments, setAssignments] = useState([]);
   const [vehicles, setVehicles] = useState([]);
@@ -19,11 +19,11 @@ const AssignmentDashboard = () => {
   });
   const [searchTerm, setSearchTerm] = useState('');
   const [submitting, setSubmitting] = useState(false);
-
+ 
   useEffect(() => {
     loadData();
   }, []);
-
+ 
   const loadData = async () => {
     try {
       setLoading(true);
@@ -34,7 +34,11 @@ const AssignmentDashboard = () => {
       ]);
       setAssignments(assignmentsResponse || []);
       setVehicles(vehiclesResponse || []);
+      // COMMENT ORIGINAL--
+      //
       setRoutes(routesResponse.data?.content || []);
+       // CHANGE THIS LINE: Expect routesResponse to be the array directly
+       //setRoutes(routesResponse || []);
     } catch (err) {
       setError('Failed to load data');
       console.error('Load data error:', err);
@@ -42,7 +46,7 @@ const AssignmentDashboard = () => {
       setLoading(false);
     }
   };
-
+ 
   const handleCreate = () => {
     setModalType('create');
     setFormData({
@@ -53,7 +57,7 @@ const AssignmentDashboard = () => {
     setSelectedAssignment(null);
     setShowModal(true);
   };
-
+ 
   const handleEdit = (assignment) => {
     setModalType('edit');
     setFormData({
@@ -64,18 +68,18 @@ const AssignmentDashboard = () => {
     setSelectedAssignment(assignment);
     setShowModal(true);
   };
-
+ 
   const handleDelete = (assignment) => {
     setModalType('delete');
     setSelectedAssignment(assignment);
     setShowModal(true);
   };
-
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
     setError('');
-
+ 
     try {
       if (modalType === 'create') {
         await assignmentAPI.create(formData);
@@ -84,7 +88,7 @@ const AssignmentDashboard = () => {
       } else if (modalType === 'delete') {
         await assignmentAPI.delete(selectedAssignment.assignmentId);
       }
-      
+     
       setShowModal(false);
       loadData();
     } catch (err) {
@@ -93,23 +97,25 @@ const AssignmentDashboard = () => {
       setSubmitting(false);
     }
   };
-
+ 
+ 
+ 
   const filteredAssignments = assignments.filter(assignment =>
     assignment.assignmentId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     assignment.vehicleId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     assignment.routeId?.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
+ 
   const getVehicleInfo = (vehicleId) => {
     const vehicle = vehicles.find(v => v.vehicleId === vehicleId);
     return vehicle ? `${vehicle.registrationNo} (${vehicle.type})` : vehicleId;
   };
-
+ 
   const getRouteInfo = (routeId) => {
     const route = routes.find(r => r.routeId === routeId);
     return route ? `${route.routeName}` : routeId;
   };
-
+ 
   const getModalTitle = () => {
     switch (modalType) {
       case 'create': return 'Create New Assignment';
@@ -118,7 +124,7 @@ const AssignmentDashboard = () => {
       default: return '';
     }
   };
-
+ 
   if (loading) {
     return (
       <div className="text-center py-5">
@@ -127,7 +133,7 @@ const AssignmentDashboard = () => {
       </div>
     );
   }
-
+ 
   return (
     <div>
       <div className="d-flex justify-content-between align-items-center mb-4">
@@ -137,15 +143,15 @@ const AssignmentDashboard = () => {
           Create Assignment
         </Button>
       </div>
-
+ 
       {error && (
         <Alert variant="danger" className="mb-4">
           {error}
         </Alert>
       )}
-
+ 
       {/* Summary Cards */}
-      <Row className="mb-4">
+      <Row className="mb-4 justify-content-around">
         <Col md={3} className="mb-3">
           <Card className="border-0 shadow-sm">
             <Card.Body className="d-flex align-items-center">
@@ -174,19 +180,7 @@ const AssignmentDashboard = () => {
             </Card.Body>
           </Card>
         </Col>
-        <Col md={3} className="mb-3">
-          <Card className="border-0 shadow-sm">
-            <Card.Body className="d-flex align-items-center">
-              <div className="bg-info bg-opacity-10 p-3 rounded me-3">
-                <Calendar className="text-info" size={24} />
-              </div>
-              <div>
-                <h3 className="mb-0 fw-bold">{vehicles.filter(v => v.status === 'ASSIGNED').length}</h3>
-                <small className="text-muted">Assigned Vehicles</small>
-              </div>
-            </Card.Body>
-          </Card>
-        </Col>
+       
         <Col md={3} className="mb-3">
           <Card className="border-0 shadow-sm">
             <Card.Body className="d-flex align-items-center">
@@ -201,7 +195,7 @@ const AssignmentDashboard = () => {
           </Card>
         </Col>
       </Row>
-
+ 
       {/* Search and Table */}
       <Card className="border-0 shadow-sm">
         <Card.Header className="bg-white border-0">
@@ -285,7 +279,7 @@ const AssignmentDashboard = () => {
           </Table>
         </Card.Body>
       </Card>
-
+ 
       {/* Modal */}
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header closeButton>
@@ -321,7 +315,7 @@ const AssignmentDashboard = () => {
                     ))}
                   </Form.Select>
                 </Form.Group>
-                
+               
                 <Form.Group className="mb-3">
                   <Form.Label>Route</Form.Label>
                   <Form.Select
@@ -337,7 +331,7 @@ const AssignmentDashboard = () => {
                     ))}
                   </Form.Select>
                 </Form.Group>
-                
+               
                 <Form.Group className="mb-3">
                   <Form.Label>Date Assigned</Form.Label>
                   <Form.Control
@@ -374,6 +368,5 @@ const AssignmentDashboard = () => {
     </div>
   );
 };
-
+ 
 export default AssignmentDashboard;
-
