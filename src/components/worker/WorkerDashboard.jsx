@@ -19,7 +19,7 @@ import {
   Moon,
   Sun,
   LogOut,
-  Recycle,
+  Leaf,
   Map
 } from 'lucide-react';
 import { pickupAPI } from '../../services/api';
@@ -60,7 +60,7 @@ const WorkerDashboard = () => {
       <Navbar className={`border-bottom ${theme === 'dark' ? 'bg-dark border-secondary' : 'bg-white'}`}>
         <Container fluid>
           <Navbar.Brand className={theme === 'dark' ? 'text-light' : ''}>
-            <Recycle size={24} className="text-success me-2" />
+            <Leaf size={24} className="text-success me-2" />
             WasteWise Worker
           </Navbar.Brand>
           <div className="d-flex align-items-center gap-2">

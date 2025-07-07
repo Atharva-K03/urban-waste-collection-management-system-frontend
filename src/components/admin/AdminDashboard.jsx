@@ -13,7 +13,7 @@ import {
   Truck,
   Users,
   Calendar,
-  Recycle
+  Leaf
 } from 'lucide-react';
 import LogsDashboard from './LogsDashboard';
 import ZoneDashboard from './ZoneDashboard';
@@ -110,7 +110,7 @@ const AdminDashboard = () => {
               <Menu size={20} />
             </Button>
             <Navbar.Brand className={`d-flex align-items-center mb-0 ${theme === 'dark' ? 'text-light' : ''}`}>
-              <Recycle size={28} className="text-success me-2" />
+              <Leaf size={28} className="text-success me-2" />
               <span className="fw-bold">WasteWise Admin</span>
             </Navbar.Brand>
           </div>
