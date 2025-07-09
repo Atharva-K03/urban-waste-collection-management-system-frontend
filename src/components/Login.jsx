@@ -102,12 +102,9 @@ const AuthPage = () => {
             <h1 className={`display-3 fw-bold mb-4 ${theme === 'dark' ? 'text-light' : 'text-success'}`}>
               WasteWise
             </h1>
-            <p className={`fs-5 mb-5 ${theme === 'dark' ? 'text-light opacity-75' : 'text-muted'}`}>
-              Smart Waste Management
-            </p>
-
+            
             {[
-              { icon: <Truck size={28} />, title: 'Smart Scheduling', sub: 'Optimize routes' },
+              { icon: <Truck size={28} />, title: 'Waste Management', sub: 'Optimize routes' },
               { icon: <Shield size={28} />, title: 'Secure Access', sub: 'Role‑based auth' },
               { icon: <Users size={28} />, title: 'Team Management', sub: 'Coordinate staff' },
             ].map((c, i) => (
